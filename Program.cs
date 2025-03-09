@@ -1,17 +1,24 @@
 using Microsoft.EntityFrameworkCore;
-using TodoApi.models;
 using TodoApi.Models;
+using TodoApi.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configuracion MongoDB 
+builder.Services.Configure<MongoDBSettings>(
+    builder.Configuration.GetSection("MongoDB"));
 
+
+builder.Services.AddSingleton<PlayerService>();
 builder.Services.AddControllers();
 
+// Registra el DbContext usando la base de datos en memoria
 builder.Services.AddDbContext<PlayerContext>(opt =>
     opt.UseInMemoryDatabase("PlayersDB"));
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+
+// Registra Swagger para documentación y pruebas
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
