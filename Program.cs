@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configuracion MongoDB 
 builder.Services.Configure<MongoDBSettings>(
-    builder.Configuration.GetSection("MongoDB"));
+builder.Configuration.GetSection("MongoDB"));
 
 
 builder.Services.AddSingleton<PlayerService>();
@@ -30,6 +30,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+/*app.UseCors(builder =>
+{
+    builder.WithOrigins("http://localhost:8080") // Permite solicitudes desde Godot
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+});*/
 
 app.UseHttpsRedirection();
 

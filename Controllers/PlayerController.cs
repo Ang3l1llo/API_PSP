@@ -15,7 +15,7 @@ namespace TodoApi.Controllers
             _playerService = playerService;
         }
 
-        
+
         [HttpGet]
         public async Task<ActionResult<List<Player>>> GetPlayers()
         {
@@ -27,11 +27,11 @@ namespace TodoApi.Controllers
         [HttpGet("top5")]
         public async Task<ActionResult<List<Player>>> GetTop5()
         {
-            var jugadores = await _playerService.GetTop5PlayersAsync();
-            return Ok(jugadores);
+            var players = await _playerService.GetTop5PlayersAsync();
+            return Ok(players);
         }
 
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Player>> GetPlayer(String id)
         {
@@ -69,6 +69,17 @@ namespace TodoApi.Controllers
             if (jugador == null) return NotFound();
 
             await _playerService.DeleteAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/addpoints")]
+        public async Task<IActionResult> AddPoints(string id, [FromBody] int points)
+        {
+            var existingPlayer = await _playerService.GetByIdAsync(id);
+            if (existingPlayer == null) return NotFound();
+
+            existingPlayer.Puntuacion += points;
+            await _playerService.UpdateAsync(id, existingPlayer);
             return NoContent();
         }
     }
