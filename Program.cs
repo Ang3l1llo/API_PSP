@@ -31,12 +31,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/*app.UseCors(builder =>
-{
-    builder.WithOrigins("http://localhost:8080") // Permite solicitudes desde Godot
-           .AllowAnyHeader()
-           .AllowAnyMethod();
-});*/
 
 app.UseHttpsRedirection();
 

@@ -73,14 +73,20 @@ namespace TodoApi.Controllers
         }
 
         [HttpPut("{id}/addpoints")]
-        public async Task<IActionResult> AddPoints(string id, [FromBody] int points)
+        public async Task<IActionResult> AddPoints(string id, [FromBody] int newScore)
         {
             var existingPlayer = await _playerService.GetByIdAsync(id);
             if (existingPlayer == null) return NotFound();
 
-            existingPlayer.Puntuacion += points;
-            await _playerService.UpdateAsync(id, existingPlayer);
-            return NoContent();
+            if (newScore > existingPlayer.Puntuacion)
+            {
+                existingPlayer.Puntuacion = newScore;
+                await _playerService.UpdateAsync(id, existingPlayer);
+                return Ok(new { updated = true, newHighScore = newScore });
+            }
+            return Ok(new { updated = false, currentHighScore = existingPlayer.Puntuacion });
+
+            
         }
     }
 }
